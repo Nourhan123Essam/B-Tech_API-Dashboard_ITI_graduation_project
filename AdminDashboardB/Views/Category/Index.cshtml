@@ -1,0 +1,99 @@
+﻿﻿
+ @model IEnumerable<DTOsB.Category.GetAllCategoriesDTO>
+<div class="container my-5 shadow p-4 rounded">
+    <div class="row mb-5 mt-4 align-items-center">
+        <!-- Language Filter -->
+        <div class="shadow rounded-3 bg-dark ms-3 rounded p-1 col-12 col-md-3 text-center text-light fs-5 fw-bold">
+            <label for="languageFilter" class="form-label">Filter by Language</label>
+        </div>
+        <div class="col-md-5 col-12">
+            <form class="d-flex" role="search" asp-action="FilterByLanguage" asp-controller="Category" method="get">
+                <select class="form-select shadow me-2" id="languageFilter" name="languageId" required>
+                    <option value="">-- Select Language --</option>
+                    @foreach (var language in ViewBag.Languages)
+                    {
+                        <option value="@language.Id">@language.Name</option>
+                    }
+                </select>
+                <button class="shadow btn btn-primary" type="submit">Filter</button>
+            </form>
+        </div>
+        <div class="col-12 col-md-3 text-center mt-3 mt-md-0">
+            <a asp-controller="Category" asp-action="Create" class="shadow btn btn-success">
+                <i class="fa-solid fa-plus me-2"></i> Add New Category
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-5 mt-4 align-items-center">
+        <!-- Category Name Search -->
+        <div class="shadow rounded-3 bg-dark ms-3 rounded p-1 col-12 col-md-3 text-center text-light fs-5 fw-bold">
+            <label for="search" class="form-label">Category Name</label>
+        </div>
+        <div class="col-md-5 col-12">
+            <form class="d-flex" role="search" asp-action="Search" asp-controller="Category" method="get">
+                <input class="shadow form-control me-2" id="search" type="search" name="name" placeholder="Search Category" aria-label="Search">
+                <button class="shadow btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive shadow rounded-3">
+        <table class="table table-hover text-center align-middle">
+            <thead class="table-dark shadow">
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Language</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any()) // استخدام Any() مع IEnumerable
+                {
+                    foreach (var item in Model)
+                    {
+                        if (item.Translations != null) // تحقق من وجود ترجمات
+                        {
+                            foreach (var translation in item.Translations)
+                            {
+                                <tr>
+                                    <td class="text-center" style="width: 200px; height: 100px;">
+                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                        {
+                                            <img class="img-fluid" style="max-width: 100px;" src="@item.ImageUrl" alt="Category Image">
+                                        }
+                                        else
+                                        {
+                                            <span>No Image</span>
+                                        }
+                                    </td>
+                                    <td>@translation.CategoryName </td>
+                                    <td>@translation.Description "</td>
+                                    <td>@translation.Language?.Code </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a class="btn btn-warning text-white" asp-action="Edit" asp-route-id="@item.Id">
+                                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                                                <i class="fa-solid fa-trash-can"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No categories found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

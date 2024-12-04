@@ -1,0 +1,85 @@
+﻿﻿
+@model DTOsB.Order.OrderDTO.AddOrUpdateOrderBDTO
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<div class="container my-5 ">
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6 col-md-8 col-sm-12 mt-5">
+
+            <form asp-action="Add" class="shadow p-4 rounded bg-light">
+                <h2 class="text-center mb-4 bg-light fw-bold text-primary p-4 shadow rounded" style="margin-top: -80px">Edit Order</h2>
+
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="TotalPrice" />
+                <input type="hidden" asp-for="ApplicationUserId" />
+                <input type="hidden" asp-for="OrderDate" />
+
+
+                <div class="form-group">
+                    <label asp-for="CurrentStatus" class="control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="CurrentStatus" class="form-control">
+                            <option value="">Select Status</option>
+                            @foreach (var status in Enum.GetValues(typeof(ModelsB.Order_B.Status)))
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="d-grid gap-2 mt-4">
+                    <button class="btn btn-success shadow" type="submit">Add</button>
+                </div>
+
+                @*
+                <div class="mb-3">
+                <label class="fs-5 fw-bold">Customer Name</label>
+                <input type="text" class="form-control shadow-sm" value="Name" disabled />
+                </div>
+
+
+                <div class="mb-3">
+                <label class="fs-5 fw-bold">Ordered Date</label>
+                <input type="text" class="form-control shadow-sm" value="Ordered Date" disabled />
+                </div>
+
+                <div class="mb-3">
+                <label class="fs-5 fw-bold">Total Price</label>
+                <input type="text" class="form-control shadow-sm" value="TotalPrice" disabled />
+                </div>
+
+                <div class="mb-3">
+                <label class="fs-5 fw-bold" for="DeliverdOn">Current Status</label>
+                @* @if (Model.CurrentStatus == null)
+                {
+                <input type="text" class="form-control shadow-sm" value="undefined" disabled />
+                }
+                else
+                {
+                <input type="text" class="form-control shadow-sm" value="CurrentStatus" disabled />
+                }
+                </div>
+
+                <div class="mb-3">
+                <label class="fs-5 fw-bold">Address</label>
+                <input type="text" class="form-control shadow-sm" value="Address" disabled />
+                </div>
+
+
+                <div class="mb-3">
+                <label class="fs-5 fw-bold">City</label>
+                <input type="text" class="form-control" value="City" disabled />
+                </div> *@
+
+
+            </form>
+        </div>
+    </div>
+</div>

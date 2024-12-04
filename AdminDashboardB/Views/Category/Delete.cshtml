@@ -1,0 +1,21 @@
+﻿@model DTOsB.Category.GetAllCategoriesDTO
+
+    <h2>Delete Category</h2>
+
+    @* Check if there are translations available *@
+    @if (Model.Translations != null && Model.Translations.Any())
+    {
+        @* Display the category name from the first translation or any specific language if desired *@
+        var categoryName = Model.Translations.FirstOrDefault()?.CategoryName ?? "Unnamed Category";
+        <p>Are you sure you want to delete this category: <strong>@categoryName</strong>?</p>
+    }
+    else
+    {
+        <p>Are you sure you want to delete this category? (No name available)</p>
+    }
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" name="id" value="@Model.Id" /> <!-- Assuming Id is a property of GetAllCategoriesDTO -->
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>

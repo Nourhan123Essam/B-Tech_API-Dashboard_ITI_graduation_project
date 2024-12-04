@@ -1,0 +1,6 @@
+@B_Tech.API_HostAddress = http://localhost:5233
+
+GET {{B_Tech.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,97 @@
+﻿@model DTOsB.Category.CreateOrUpdateCategoriesDTO
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-12 mt-5">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
+                <h2 class="text-center mb-4 bg-light fw-bold text-primary p-4 shadow rounded">Edit Category</h2>
+                <br /><br />
+
+                <!-- Validation Summary -->
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <!-- Category Image -->
+                <div class="mb-3">
+                    <img class="img-fluid" style="max-width: 100px;" src="@Model.ImageUrl" alt="Category Image" />
+                </div>
+                <br /><br />
+                <div class="mb-3">
+                    <label class="form-label fs-5 fw-bold" for="imageFile">Category Image</label>
+                    <input type="file" class="form-control shadow-sm" id="imageFile" name="imageFile">
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+
+                </div>
+
+                <!-- Translations Section -->
+                <div id="translationsContainer">
+                    @for (int i = 0; i < Model.Translations.Count; i++)
+                    {
+                        <div class="translation-item mb-3">
+                            <label class="form-label fs-5 fw-bold">Category Name</label>
+                            <input type="text" class="form-control shadow-sm" name="Translations[@i].CategoryName" value="@Model.Translations[i].CategoryName" required>
+                            <span asp-validation-for="Translations[0].CategoryName" class="text-danger"></span>
+
+                            <label class="form-label fs-5 fw-bold">Category Description</label>
+                            <textarea class="form-control shadow-sm" name="Translations[@i].Description" rows="3" required>@Model.Translations[i].Description</textarea>
+                            <span asp-validation-for="Translations[0].Description" class="text-danger"></span>
+
+                            @Html.DropDownListFor(model => model.Translations[i].LanguageId,
+                                     (IEnumerable<SelectListItem>)ViewBag.Languages, "-- Select Language --", new { @class = "form-select shadow-sm", required = "required" })
+
+                           @*  <div class="mb-3 form-check">
+                                <input class="form-check-input" type="checkbox" name="Translations[@i].IsMainCategory" value="true" @(Model.Translations[i].IsMainCategory ? "checked" : "") />
+                                <label class="form-check-label fs-5 fw-bold">Is Main Category</label>
+                            </div> *@
+                        </div>
+                    }
+                </div>
+
+                <button type="button" class="btn btn-secondary" onclick="addTranslation()">Add Another Translation</button>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button class="btn btn-success btn-lg shadow" type="submit">
+                        <i class="fa-solid fa-check"></i> Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let translationIndex = @Model.Translations.Count;
+
+    function addTranslation() {
+        const container = document.getElementById('translationsContainer');
+        const newTranslation = `
+            <div class="translation-item mb-3">
+                <label class="form-label fs-5 fw-bold">Category Name</label>
+                <input type="text" class="form-control shadow-sm" name="Translations[${translationIndex}].CategoryName" placeholder="Enter Category Name" required>
+
+                <label class="form-label fs-5 fw-bold">Category Description</label>
+                <textarea class="form-control shadow-sm" name="Translations[${translationIndex}].Description" rows="3" required></textarea>
+
+                <select class="form-select" name="Translations[${translationIndex}].LanguageId" required>
+                    <option value="">-- Select Language --</option>
+                    @foreach (var language in ViewBag.Languages)
+                    {
+                        <option value="@language.Value">@language.Text</option>
+                    }
+                </select>
+
+                
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', newTranslation);
+        translationIndex++;
+    }
+</script>

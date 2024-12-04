@@ -1,0 +1,235 @@
+﻿@model  DTOsB.Shared.ResultView< IEnumerable<DTOsB.Product.ProductDto>>
+@* @model DTOsB.Shared.EntityPaginatedB<DTOsB.Product.ProductDto> *@
+@*     @model DTOsB.Product.ProductViewModelWithLang *@
+
+
+@{
+    ViewData["Title"] = "Products";
+   var languages = ViewBag.AvailableLanguages as List<DTOsB.Shared.LanguageDto>;
+    var categories = ViewBag.Categories as List<DTOsB.Category.GetAllCategoriesDTO>;
+}
+
+
+
+
+<div class="container my-5 shadow p-4 rounded">
+    <div class="container my-5 shadow p-4 rounded">
+    <form asp-action="Index" method="get">
+        <!-- Language Dropdown -->
+        <div class="mb-3">
+            <label for="selectedLanguageId" class="form-label">Select Language</label>
+            <select class="form-select" name="selectedLanguageId" onchange="this.form.submit()">
+                <option value="">Select Language</option>
+                @foreach (var lang in languages)
+                {
+                    <option value="@lang.Id">
+                        @lang.Name
+                    </option>
+                }
+                }
+            </select>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="mb-3">
+            <label for="selectedCategoryId" class="form-label">Select Category</label>
+            <select class="form-select" name="selectedCategoryId" onchange="this.form.submit()">
+                <option value="">Select Category</option>
+                @foreach (var cat in categories)
+                {
+                    <option value="@cat.Id">
+                        @cat.Translations.FirstOrDefault()?.CategoryName
+                    </option>
+                }
+                }
+            </select>
+        </div>
+
+        <!-- Search Field -->
+        <div class="mb-3">
+            <label for="searchString" class="form-label">Product Name</label>
+            <input type="search" class="form-control" name="searchString" placeholder="Search Products" value="@ViewBag.SearchString" aria-label="Search">
+        </div>
+
+            
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Search & Filter</button>
+        </div>
+    </form>
+        <div class="col-12 col-md-3 text-center mt-3 mt-md-0">
+            <a asp-action="Create" class="shadow btn btn-success">
+                <i class="fa-solid fa-plus me-2"></i>Add New Product
+            </a>
+        </div>
+        
+</div>
+
+
+    @* @if ((languages != null && languages.Any()) && (categories != null && categories.Any()))
+    {
+        <div class="container my-5 shadow p-4 rounded">
+            <form asp-action="Index" method="get">
+                <select class="form-select" name="selectedLanguageId" onchange="this.form.submit()">
+                    <option value="">Select Language</option>
+                    @foreach (var lang in languages)
+                    {
+                        <option value="@lang.Id">
+                            @lang.Name
+                        </option>
+                    }
+                    }
+                </select>
+                <select class="form-select" name="selectedCategoryId" onchange="this.form.submit()">
+                    <option value="">Select Category</option>
+                    @foreach (var cat in categories)
+                    {
+                        <option value="@cat.Id">
+                            @cat.Translations.FirstOrDefault()?.CategoryName
+                        </option>
+                    }
+                    }
+                </select>
+            </form>
+        </div>
+    }
+
+
+  
+    <div class="row mb-5 mt-4 align-items-center">
+        <div class="shadow rounded-3 bg-dark ms-3 rounded p-1 col-12 col-md-3 text-center text-light fs-5 fw-bold">
+            <label for="search" class="form-label">Product Name </label>
+        </div>
+        <div class="col-12 col-md-5">
+            <form class="d-flex" role="search" asp-action="Search" asp-controller="Product" method="get">
+                <input class="shadow form-control me-2" type="search" name="searchString" placeholder="Search Products" aria-label="Search">
+                <button class="shadow btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="col-12 col-md-3 text-center mt-3 mt-md-0">
+            <a asp-action="Create" class="shadow btn btn-success">
+                <i class="fa-solid fa-plus me-2"></i>Add New Product
+            </a>
+        </div>
+    </div> *@
+
+    <div class="table-responsive shadow rounded-3">
+        <table class="table table-hover text-center align-middle">
+            <thead class="table-dark shadow">
+                <tr>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Brand Name</th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">Stock Quantity</th>
+                    <th class="text-center">Image</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Entity)
+                {
+                    <tr class="align-middle">
+                        <!-- Name Translation by LanguageId -->
+                        <td class="text-center">
+                            @item.Translations.FirstOrDefault(/* trans => trans.LanguageId == ViewBag.SelectedLanguageId  */)?.Name
+                        </td>
+
+                        <!-- Brand Name Translation by LanguageId -->
+                        <td class="text-center">
+                            @item.Translations.FirstOrDefault(/* trans => trans.LanguageId == ViewBag.SelectedLanguageId */ )?.BrandName
+                        </td>
+
+                        <!-- Price -->
+                        <td class="text-center">
+                            @item.Price.ToString("C")
+                        </td>
+
+                        <!-- Stock Quantity -->
+                        <td class="text-center">
+                            @item.StockQuantity
+                        </td>
+
+                        <!-- Image -->
+                        <td class="text-center">
+                            @if (item.Images.Any())
+                            {
+                                <img class="img-thumbnail" src="@item.Images.FirstOrDefault()?.Url" alt="Product Image" style="max-width: 100px;">
+
+                            }
+                            else
+                            {
+                                <span>No image available</span>
+                            }
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-info text-white" asp-action="Details" asp-route-id="@item.Id">
+                                    <i class="fa-solid fa-circle-info"></i> Details
+                                </a>
+                                <a class="btn btn-warning text-white" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                </a>
+                                <a class="btn btn-danger text-white" asp-action="Delete" asp-route-id="@item.Id">
+                                    <i class="fa-solid fa-pen-to-square"></i> Delete
+                                </a>
+                               @*  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-item-id="@item.Id">
+                                    Delete
+                                </button>
+                                <!-- Delete Confirmation Modal -->
+                                <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this item?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form id="deleteForm" method="post" action="">
+                                                    <!-- Test with a static ID -->
+                                                    <input type="hidden" name="id" id="deleteItemId" value="">
+                                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> *@
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+          
+            </tbody>
+        </table>
+    </div>
+    
+   
+
+</div>
+
+
+
+
+
+@* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#deleteConfirmModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var itemId = button.data('item-id'); // Extract info from data-* attributes
+        console.log('Modal opened with item ID:', itemId); // Debugging line
+
+        // Update the form's hidden input with the item ID and the form action URL
+        var modal = $(this);
+        modal.find('#deleteItemId').val(itemId);
+        modal.find('#deleteForm').attr('action', '/Product/Delete/' + itemId); // Adjust the controller name as needed
+        console.log('Form action set to:', '/Product/Delete/' + itemId); // Debugging line
+    });
+</script> *@

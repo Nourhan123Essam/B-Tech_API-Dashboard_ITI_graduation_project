@@ -1,0 +1,125 @@
+﻿@model DTOsB.Shared.ResultView<DTOsB.Product.ProductCreateOrUpdateDto>
+
+@{
+    ViewData["Title"] = "Details";
+    var categories = ViewBag.ProductCategories as List<DTOsB.Category.ProductCategoryDto>;
+
+    if (categories == null)
+    {
+        categories = new List<DTOsB.Category.ProductCategoryDto>(); // Initialize if null
+    }
+}
+
+<div class="container my-5 p-4 shadow rounded col-md-10">
+    <div class="row">
+        <!-- Product Details -->
+        <div class="col-md-8 mt-5">
+            <h2 class="text-center mb-4 bg-light fw-bold text-primary p-4 shadow rounded" style="margin-top: -100px">Product Details</h2>
+            <hr />
+            <ul class="list-group shadow">
+                <li class="list-group-item">
+                    <strong>Name:</strong> @Model.Entity.Translations.FirstOrDefault(trans => trans.LanguageId == 2)?.Name
+                </li>
+                <li class="list-group-item">
+                    <strong>Price:</strong> @Model.Entity.Price
+                </li>
+                <li class="list-group-item">
+                    <strong>Stock Quantity:</strong> @Model.Entity.StockQuantity
+                </li>
+                <li class="list-group-item">
+                    <strong>Description:</strong> @Model.Entity.Translations.FirstOrDefault(trans => trans.LanguageId ==2)?.Description
+                </li>
+               
+                <li class="list-group-item">
+                    <strong>Category Name:</strong>
+                    <ul>
+                     @if (categories != null && categories.Any())
+                         {
+                            @foreach (var cat in categories)
+                            {
+                            <li>
+                                @cat?.Category?.Translations?.FirstOrDefault()?.CategoryName
+                            </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>No categories available</li>
+                        }
+                    </ul>
+                </li>
+                <li class="list-group-item">
+                    <strong>Specifications:</strong>
+                    <ul>
+                        @foreach (var specification in Model.Entity.Specifications)
+                        {
+                            <li>
+                                @specification.Translations.FirstOrDefault(l => l.LanguageId == 2)?.TranslatedKey:
+                                @specification.Translations.FirstOrDefault(l => l.LanguageId == 2)?.TranslatedValue
+                            </li>
+                        }
+                    </ul>
+                </li>
+             
+                <li class="list-group-item">
+                    <strong>Images:</strong>
+                    <ul class="list-group">
+                        @foreach (var image in Model.Entity.Images)
+                        {
+                            <li class="list-group-item">
+                                
+                                <img src="@image.Url" class="img-thumbnail" alt="Product Image" style="max-width: 150px;" />
+                              
+                            </li>
+                           
+                        }
+                    </ul>
+                   
+
+                </li>
+            </ul>
+        </div>
+
+        <!-- Product Image Display -->
+        <div class="col-md-4">
+            <div class="card shadow">
+                @if (Model.Entity.Images != null && Model.Entity.Images.Any())
+                {
+                    <img src="@Model.Entity.Images.FirstOrDefault()?.Url" class="card-img-top img-fluid" alt="Main Product Image" />
+                }
+                else
+                {
+                    <img src="~/icons8-admin-16.png" class="card-img-top img-fluid" alt="Placeholder Image" />
+                }
+            </div>
+        </div>
+
+
+        <li class="list-group-item">
+            <strong>Created:</strong> @Model.Entity.Created
+        </li>
+        <li class="list-group-item">
+            <strong>Created By:</strong> @Model.Entity.CreatedBy
+        </li>
+        <li class="list-group-item">
+            <strong>Updated:</strong> @Model.Entity.Updated
+        </li>
+        <li class="list-group-item">
+            <strong>Updated By:</strong> @Model.Entity.UpdatedBy
+        </li>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col text-center">
+            <a asp-action="Edit" asp-route-id="@Model.Entity.Id" class="btn btn-warning me-2 shadow">
+                <i class="fa-solid fa-pen"></i> Edit
+            </a>
+            <a asp-action="Index" class="btn btn-secondary shadow">
+                <i class="fa-solid fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+
