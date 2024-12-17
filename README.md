@@ -77,6 +77,8 @@ This project follows **Onion Architecture** to promote separation of concerns, m
 - **Create Order**: Initiates a PayPal order with the given amount and returns the order ID for processing.
 - **Capture Order**: Finalizes the PayPal order after payment is completed.
 
+(Order&Payment Ui Swagger.png)
+
 ---
 
 ## Technologies Used
