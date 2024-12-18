@@ -1,46 +1,63 @@
-# E-Commerce Backend API
+# 🛒 E-Commerce Backend API
 
-## Overview
+## 📖 Overview
 
-This repository contains the backend for the E-Commerce project, divided into two main parts:
+Welcome to the **E-Commerce Backend API** repository! This project is divided into two main components:  
+1. **Admin Dashboard**: Built using **ASP.NET MVC** for managing administrative functionality.  
+2. **Public Website Backend**: Developed as an **ASP.NET Web API** to handle public-facing operations.  
 
-1. **Admin Dashboard**: Built using **ASP.NET MVC** for admin functionality.
-2. **Public Website Backend**: Built as an **ASP.NET Web API** for handling public user interactions.
+### 📌 Note:
+This documentation highlights **only the parts of the project** that I have contributed to. While I played a key role in several areas (outlined below), other contributors worked on additional features not detailed here. I hope this README offers clear insight into the areas I focused on. 😊
 
-### Note:
-The description below covers **only the parts of the project** that I have worked on. Other parts of the project not detailed here are handled by other contributors and might not be included in this specific backend repository section.
+---
+## 🔗 Related Repository
+
+The frontend for this project is built in **Angular** with responsive UI using **Bootstrap**. Check it out [here](https://github.com/Nourhan123Essam/B-Tech_public_website_ITI_graduation_project).
 
 ---
 
-## Project Structure
+## 🏗️ Project Structure
 
-### 1. **Admin Dashboard (AdminDashboardB)**
+### 1. **Admin Dashboard**  
+The **Admin Dashboard** provides an intuitive interface for administrators to manage orders, view order details, and perform various actions like updating, canceling, or deleting orders.
 
-The **AdminDashboardB** is an **ASP.NET MVC** project providing administrative interfaces for managing orders, viewing order details, and controlling various order-related actions such as canceling or updating orders.
+#### 🔧 My Contributions:
+- Implemented **CRUD operations** for the **Order** entity in the **MVC** project.  
+- Ensured smooth integration with the Onion Architecture layers for maintainability and scalability.  
 
-- **Controllers**: Handles user requests and performs business logic related to order management.
-- **Views**: Provides an interactive user interface for managing orders.
-- **Models**: Represents the data structures used for displaying data in the views.
+---
 
-### 2. **Public Website Backend (B-Tech.API)**
+### 2. **Public Website Backend**  
+The **Public Website Backend** is a RESTful API that handles key public-facing functionalities, including order management, cart operations, and payment processing.  
 
-The **B-Tech.API** is an **ASP.NET Web API** project that handles public-facing operations like creating orders, updating cart items, and processing payments (e.g., PayPal integration).
+#### 🔧 My Contributions:
+1. **Order and OrderItem Management**  
+   - Implemented **CRUD operations** for the **Order** and **OrderItem** entities in the `OrderController`.  
+     - Each order contains a collection of order items, with foreign key relationships linking the `Order` to its `OrderItems` and the `OrderItems` to their associated products.
+     - Ensured smooth handling of the order lifecycle, from creation to updates and deletions.
 
-- **Controllers**: Responsible for receiving HTTP requests and returning data in response, leveraging the business logic in the Application layer.
-- **Models**: Defines the entities for the e-commerce application (e.g., `Order`, `OrderItem`, etc.).
-- **DTOs**: The Data Transfer Objects used for sending and receiving data via API requests.
+2. **Cart Operations**  
+   - Developed cart management logic within the `OrderController` to enable seamless cart functionality.  
+     - The cart is represented as an **Order** with a status of `InCart`.  
+     - Users can view their cart contents from any browser, making use of persistent storage.
 
-### **Onion Architecture Breakdown**
+3. **PayPal Integration**  
+   - Integrated **PayPal** payment functionality via a dedicated `PayPalController`.  
+     - Streamlined payment workflows by enabling secure order payment processing with PayPal's API.
+
+---
+
+### 🧅 Onion Architecture Breakdown  
 
 This project follows **Onion Architecture** to promote separation of concerns, maintainability, and scalability.
 
 #### 1. **DbContextB** (Database Access)
    - Provides the entry point to interact with the database using **Entity Framework Core**.
-   - Contains the **DbContext** that manages the connection to the database and tracks entities like `Order`, `OrderItem`, etc.
+   - Contains the **BTechDbContext** that manages the connection to the database and tracks entities like Order, OrderItem, etc.
 
 #### 2. **DTOsB** (Data Transfer Objects)
-   - Contains the **DTOs** (Data Transfer Objects) used to transfer data between layers and over the API.
-   - Examples include `OrderDTO`, `OrderItemDTO`.
+   - Contains the **DTOs** (Data Transfer Objects) used to transfer data between Services in Application layer and Controllers in MVC, and API layers.
+   - Examples include SelectOrderBDTO, AddOrUpdateOrderBDTO.
 
 #### 3. **InfrastructureB** (Database Interaction)
    - Contains the implementation for accessing and interacting with the database.
@@ -48,24 +65,20 @@ This project follows **Onion Architecture** to promote separation of concerns, m
 
 #### 4. **ModelsB** (Entities)
    - Defines the core **domain models** used throughout the system.
-   - Includes entities like `Order`, `OrderItem`.
+   - Includes entities like Order, OrderItem.
 
 #### 5. **ApplicationB** (Business Logic)
    - Encapsulates the business logic of the application.
    - Implements the service layer interacting with the **InfrastructureB** to fetch or persist data, and uses **DTOsB** to manage data flow between the controllers and the core application.
 
-### How the Components Interact
-
-- **Controllers** in **AdminDashboardB** and **B-Tech.API** communicate with the **ApplicationB** layer to perform actions on the database, using the appropriate **DTOsB** for input and output.
-- The **ApplicationB** layer handles business logic and works with the **InfrastructureB** to interact with the database via **DbContextB**.
-- The **DbContextB** and **InfrastructureB** are agnostic to the UI layer, ensuring that the core logic remains independent of any presentation layer.
+![Structure](https://github.com/Nourhan123Essam/B-Tech_API-Dashboard_ITI_graduation_project/blob/main/Structure%20on%20Visual%20Studio.png)
 
 ---
 
-## Features
+## ✨ Features  
 
-### Order Management and Cart Operations
-- **Finish Order**: Completes the payment process and finalizes the order.
+### 🔹 **Order Management**
+ **Finish Order**: Completes the payment process and finalizes the order.
 - **Update Order Item Quantity**: Allows the user to update the quantity of an item in their cart.
 - **Cancel Order**: Allows the user to cancel an order (if not shipped yet).
 - **Delete Order Item**: Deletes an item from the order.
@@ -73,22 +86,23 @@ This project follows **Onion Architecture** to promote separation of concerns, m
 - **View Order**: Displays the items currently in the cart.
 - **User Orders**: Displays a user's completed orders (excluding those marked as "inCart").
 
-### PayPal Integration
+### 🔹 **PayPal Integration**
 - **Create Order**: Initiates a PayPal order with the given amount and returns the order ID for processing.
 - **Capture Order**: Finalizes the PayPal order after payment is completed.
 
 ![API](https://github.com/Nourhan123Essam/B-Tech_API-Dashboard_ITI_graduation_project/blob/main/Order%26Payment%20Ui%20Swagger.png)
+
 ---
 
-## Technologies Used
-- **ASP.NET Core Web API** for building the backend API.
-- **ASP.NET MVC** for the admin dashboard interface.
-- **Entity Framework Core** for database interaction and ORM.
-- **AutoMapper** for object-to-object mapping (e.g., mapping between domain models and DTOs).
-- **LINQ** for querying the database.
-- **PayPal SDK** for payment processing.
-- **Dependency Injection** for managing services and dependencies.
-- **Onion Architecture** for clear separation of concerns.
+## 🛠️ Technologies Used  
+
+- **ASP.NET Core Web API** for the backend logic.  
+- **ASP.NET MVC** for the admin dashboard.  
+- **Entity Framework Core** for database interaction.  
+- **PayPal SDK** for secure payment processing.  
+- **Onion Architecture** for structured and maintainable code.  
+- **AutoMapper** for seamless object mapping.  
+- **LINQ** for efficient querying.
 
 ---
 
